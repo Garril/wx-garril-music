@@ -7,12 +7,10 @@ class EnhanceRequest {
         url: BASE_URL + url,
         method: method,
         data: params,
-        success: function(res) {
-          resolve(res)
+        success: function(res) { // 可直接 success(res) {...}
+          resolve(res.data)
         },
-        fail: function(err) {
-          reject(err)
-        }
+        fail: reject
       })      
     })
   }
