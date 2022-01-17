@@ -1,0 +1,31 @@
+// 格式化视频播放量
+function formatCount(count) {
+  // parseInt全局，详细见WXS语法
+  var counter = parseInt(count) // 先做个转换，防止处理的数据格式不对
+  if(counter > 100000000) {
+    return (counter / 100000000).toFixed(1) + "亿"
+  } else if (counter > 10000) {
+    return (counter / 10000).toFixed(1) + "万"
+  } else {
+    return counter + ""
+  }
+}
+// 格式化视频播放时间
+function formatDuration(duration) {
+  duration = duration / 1000 // 毫秒先转化为秒
+  // floor不是全局，Math是全局，Math内有floor
+  var minute = Math.floor(duration / 60)
+  var second = Math.floor(duration) % 60
+  return LeftAddZero(minute) + ":" + LeftAddZero(second)
+}
+// 播放时间，个位数的话左边补零
+function LeftAddZero(time) {
+  time = time + ""
+  return ("00" + time).slice(time.length)
+}
+
+// 注意wxs,这里不支持ES6---ESModule的导出
+module.exports = {
+  formatCount: formatCount,
+  formatDuration: formatDuration
+}

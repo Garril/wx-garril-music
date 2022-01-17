@@ -1,0 +1,21 @@
+<!-- wxs的引入 -->
+<wxs src="../../utils/format.wxs" module="format"></wxs>
+<!--components/video-item-v1/index.wxml-->
+<view class="item">
+  <!-- 图片。播放量和时间 -->
+  <view class="album">
+    <!-- 加个mode，根据宽度处理高度 -->
+    <image class="image" src="{{item.cover}}" mode="widthFix"></image>
+    <view class="info">
+      <!--  下面的count要做一个xxx万播放量的格式转换，
+      不支持，像vue2用filter或者vue3用的函数return字符串
+      微信需要写到 .wxs 文件内 -->
+      <view class="count">{{format.formatCount(item.playCount)}}</view>
+      <view class="duration">{{format.formatDuration(item.mv.videos[0].duration)}}</view>
+    </view>
+  </view>
+  <!-- 视频名字 -->
+  <view class="content">
+    {{item.name}} - {{item.artistName}}
+  </view>
+</view>
