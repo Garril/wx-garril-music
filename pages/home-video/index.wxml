@@ -1,22 +1,13 @@
 <!--pages/home-video/index.wxml-->
 <view class="video">
+  <!-- wx:for遍历用的block的话，不生成任何的组件和元素，因为.video设置了flex布局，
+  要对多个封装的子组件 进行flex布局比较难控制，所以tip: 在外层套一层view，
+  即：把block改成view，再给外层的view设置class，统一设置宽度，最后让其内部的内容宽度100%自动填充
   <block wx:for="{{topMvs}}" wx:key="id">
-    
-    <view class="item">
-      <!-- 图片。播放量和时间 -->
-      <view class="album">
-        <!-- 加个mode，根据宽度处理高度 -->
-        <image class="image" src="{{item.cover}}" mode="widthFix"></image>
-        <view class="info">
-          <view class="count">{{item.playCount}}</view>
-          <view class="duration">{{item.mv.videos[0].duration}}</view>
-        </view>
-      </view>
-      <!-- 视频名字 -->
-      <view class="content">
-        {{item.name}} - {{item.artistName}}
-      </view>
-
-    </view>
+    <video-item-v1 item="{{item}}"></video-item-v1>
   </block>
+  -->
+  <view wx:for="{{topMvs}}" wx:key="id" class="item">
+    <video-item-v1 item="{{item}}"></video-item-v1>
+  </view>
 </view>
