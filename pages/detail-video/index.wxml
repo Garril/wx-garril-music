@@ -1,0 +1,10 @@
+<!--pages/detail-video/index.wxml-->
+<video class="video" 
+        src="{{mvURL.url}}"
+        loop>
+</video>
+
+<block wx:for="{{100}}" wx:key="*this">
+  <view>List{{item}}</view>
+</block>
+

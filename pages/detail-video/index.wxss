@@ -1,0 +1,11 @@
+/* pages/detail-video/index.wxss */
+page {
+  padding-top: 225px;
+  /* 这里用450rpx的话，不同型号的显示效果不同 */
+  /* 这里的布局，就使用了简单的定位，没有scroll-view，动态计算高度麻烦*/
+}
+.video {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
