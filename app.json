@@ -1,7 +1,8 @@
 {
   "pages": [
     "pages/home-music/index",
-    "pages/home-video/index"
+    "pages/home-video/index",
+    "pages/detail-video/index"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -12,10 +13,10 @@
   "tabBar": {
     "list": [
       {
-      "pagePath": "pages/home-music/index",
-      "text": "音乐",
-      "iconPath": "assets/images/tabbar/music_normal.png",
-      "selectedIconPath": "assets/images/tabbar/music_active.png"
+        "pagePath": "pages/home-music/index",
+        "text": "音乐",
+        "iconPath": "assets/images/tabbar/music_normal.png",
+        "selectedIconPath": "assets/images/tabbar/music_active.png"
       },
       {
         "pagePath": "pages/home-video/index",

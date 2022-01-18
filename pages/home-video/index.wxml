@@ -8,6 +8,10 @@
   </block>
   -->
   <view wx:for="{{topMvs}}" wx:key="id" class="item">
-    <video-item-v1 item="{{item}}"></video-item-v1>
+    <video-item-v1 item="{{item}}" 
+                  bindtap="videoItemClick"
+                  data-item="{{item}}">
+    <!-- data-item非小程序特有，而是html的知识，给标签添加属性，到点击函数的参数event里面拿,属性名item-->
+    </video-item-v1>
   </view>
 </view>

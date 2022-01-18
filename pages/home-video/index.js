@@ -38,5 +38,14 @@ Page({
       wx.stopPullDownRefresh() // 顶部下拉，主动停止动画，否则一直显示加载动画，要手动取消
     }
   },
-
+  // 点击事件
+  videoItemClick(event) {
+    // 获取视频id
+    const videoId = event.currentTarget.dataset.item.id
+    // 页面跳转
+    wx.navigateTo({
+      // url: '/pages/detail-video/index?id=' + videoId,
+      url: `/pages/detail-video/index?id=${videoId}`,
+    })
+  }
 })
