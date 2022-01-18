@@ -1,1 +1,4 @@
 /* pages/home-music/index.wxss */
+.van-search__content {
+  background-color: #fff !important;
+}

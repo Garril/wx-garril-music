@@ -1,2 +1,9 @@
 <!--pages/home-music/index.wxml-->
-<view>Home Music</view>
+<!-- disabled不能交互，绑定事件，去其他地方输入搜索内容 -->
+<van-search
+  disabled
+  background="#fafafa"
+  shape="round"
+  placeholder="搜索您喜欢的歌曲"
+  bind:click-input="handleSearchClick"
+/>
