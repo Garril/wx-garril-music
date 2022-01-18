@@ -1,7 +1,8 @@
 <!--pages/detail-video/index.wxml-->
 <video class="video" 
         src="{{mvURL.url}}"
-        loop>
+        loop
+        autoplay>
 </video>
 
 <block wx:for="{{100}}" wx:key="*this">
