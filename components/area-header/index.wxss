@@ -1,5 +1,4 @@
 /* components/area-header/index.wxss */
-/* components/area-header/index.wxss */
 .header {
   display: flex;
   justify-content: space-between;

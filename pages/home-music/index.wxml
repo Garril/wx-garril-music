@@ -23,7 +23,7 @@
   </block>
 </swiper>
 <!-- 推荐歌曲 -->
-<view class="recommend-song">
+<view class="recommend-song" wx:if="{{recommendSongs.length > 0}}">
   <!-- 注意传过去的true，加个双引号，不然变成字符串 -->
   <area-header title="推荐歌曲" showRight="{{true}}"></area-header>
   <!-- 推荐歌单列表 -->
@@ -33,4 +33,23 @@
     </block>
   </view>
 </view>
-
+<!-- 热门歌单 -->
+<song-menu-area songMenu="{{hotSongMenu}}" 
+                title="热门歌单"
+                wx:if="{{hotSongMenu.length > 0}}"
+></song-menu-area>
+<!-- 推荐歌单 -->
+<song-menu-area songMenu="{{recommendSongMenu}}"
+                title="推荐歌单"
+                wx:if="{{recommendSongMenu.length > 0}}"                
+></song-menu-area>
+<!-- 巅峰榜 -->
+<view class="ranking">
+  <area-header title="巅峰榜" showRight="{{false}}"></area-header>
+  <view class="ranking-list">
+    <!-- 注意，遍历的是对象，index是属性，value是值 -->
+    <block wx:for="{{rankingArr}}" wx:key="index">
+      <ranking-area-item item="{{item}}"></ranking-area-item>
+    </block>
+  </view>
+</view>
