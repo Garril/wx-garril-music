@@ -20,5 +20,17 @@
              mode="widthFix"
              bindload="handleSwiperImageLoaded"></image>
     </swiper-item>
-  </block>f 
+  </block>
 </swiper>
+<!-- 推荐歌曲 -->
+<view class="recommend-song">
+  <!-- 注意传过去的true，加个双引号，不然变成字符串 -->
+  <area-header title="推荐歌曲" showRight="{{true}}"></area-header>
+  <!-- 推荐歌单列表 -->
+  <view class="song-list">
+    <block wx:for="{{recommendSongs}}" wx:key="id">
+      <song-item-v1 item="{{item}}"></song-item-v1>
+    </block>
+  </view>
+</view>
+

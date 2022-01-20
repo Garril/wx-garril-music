@@ -6,7 +6,7 @@ Component({
   properties: {
     item: {
       type: Object,
-      default: {}
+      value: {} // 是value不是deafult
     }
   },
 
