@@ -1,9 +1,17 @@
 /* pages/home-music/index.wxss */
+page {
+  padding: 0 20rpx;
+}
 .van-search__content {
   background-color: #fff !important;
 }
+.van-search {
+  padding: 10px 0 !important;
+}
+/* 如果在某些机型上出现边框部分不显示，那么就加一个transform: translateY(0) */
 .swiper {
-
+  border-radius: 10rpx;
+  overflow: hidden;
 }
 .swiper-item {
   display: flex;
