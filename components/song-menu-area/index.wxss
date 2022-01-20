@@ -1,0 +1,19 @@
+/* components/song-menu-area/index.wxss */
+.menu-list {
+  white-space: nowrap;
+  /* 解决热门歌单左边的空白区域 */
+  position: relative;
+  left: -20rpx;
+  /* 紧接着解决右边的空白区域,如果这里没有设置width，那么要js动态获取宽度去设计 */
+  width: 100vw;
+}
+.menu-item {
+  display: inline-block;
+  /* 处理部分机型顶部没有对齐 */
+  vertical-align: top;
+  width: 220rpx;
+  margin-left: 20rpx;
+}
+.menu-item:last-of-type {
+  margin-right: 20rpx;
+}
