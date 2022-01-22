@@ -25,7 +25,7 @@
 <!-- 推荐歌曲 -->
 <view class="recommend-song" wx:if="{{recommendSongs.length > 0}}">
   <!-- 注意传过去的true，加个双引号，不然变成字符串 -->
-  <area-header title="推荐歌曲" showRight="{{true}}"></area-header>
+  <area-header title="推荐歌曲" showRight="{{true}}" bind:clickMore="handleRecomMoreClick"></area-header>
   <!-- 推荐歌单列表 -->
   <view class="song-list">
     <block wx:for="{{recommendSongs}}" wx:key="id">
@@ -49,7 +49,11 @@
   <view class="ranking-list">
     <!-- 注意，遍历的是对象，index是属性，value是值 -->
     <block wx:for="{{rankingArr}}" wx:key="index">
-      <ranking-area-item item="{{item}}"></ranking-area-item>
+      <ranking-area-item item="{{item}}" 
+          bindtap="handleRankingMoreClick"
+          data-signame="{{item.signName}}">
+          <!-- data-signame，不要有大写，不然过不来 -->
+      </ranking-area-item>
     </block>
   </view>
 </view>

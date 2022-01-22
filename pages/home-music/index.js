@@ -45,10 +45,11 @@ Page({
     return (res) => {
       if(Object.keys(res).length === 0) return
       const name = res.name
+      const signName = res.signName
       const coverImgUrl = res.coverImgUrl
       const playCount = res.playCount
       const ranklist = res.tracks.slice(0,3)
-      const obj = { name,coverImgUrl,ranklist,playCount }
+      const obj = { name,coverImgUrl,ranklist,playCount,signName }
       // const newRankingArr = [...this.data.rankingArr]
       // newRankingArr.push(obj)
       const newRankingArr = {...this.data.rankingArr,[idx]:obj} // [idx]:value -- idx是动态，idx：value -- idx是静态
@@ -78,6 +79,21 @@ Page({
     // 获取组件的高度
     throttleQueryRect('.swiper-image').then(res => {
       this.setData({ swiperHeight: res[0].height })
+    })
+  },
+  // 点击推荐歌曲的 更多按钮
+  handleRecomMoreClick() {
+    this.navToDetailSongs("hotRanking")
+  },
+  // 点击巅峰榜的3个榜单
+  handleRankingMoreClick(event) {
+    const signName = event.currentTarget.dataset.signame;
+    this.navToDetailSongs(signName)
+  },
+  // 跳转到榜单对应歌单时调用的函数
+  navToDetailSongs(rankingName) {
+    wx.navigateTo({
+      url: `/pages/detail-songs/index?ranking=${rankingName}&type=rankList`,
     })
   }
 })
