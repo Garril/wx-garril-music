@@ -16,6 +16,11 @@ Component({
     screenWidth: app.globalData.screenWidth
   },
   methods: {
-
+    handleMenuItemClick(event) {
+      const listId = event.currentTarget.dataset.item.id;
+      wx.navigateTo({
+        url: `/pages/detail-songs/index?id=${listId}&type=songList`,
+      })
+    }
   }
 })

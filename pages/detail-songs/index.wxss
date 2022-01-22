@@ -1,1 +1,4 @@
 /* pages/detail-songs/index.wxss */
+page {
+  padding: 0 25rpx;
+}

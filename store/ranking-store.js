@@ -13,15 +13,19 @@ const rankingStore = new HYEventStore({
     // 0：新歌榜 1: 热歌榜 2：原创榜 3：飙升榜
     getRankingDataAction(ctx) {
       getRanking(0).then(res => {
+        res.playlist.signName = "newSongsRanking"
         ctx.newSongsRanking = res.playlist
       })
       getRanking(1).then(res => {
+        res.playlist.signName = "hotRanking"
         ctx.hotRanking = res.playlist
       })
       getRanking(2).then(res => {
+        res.playlist.signName = "originRanking"
         ctx.originRanking = res.playlist
       })
       getRanking(3).then(res => {
+        res.playlist.signName= "rushRanking"
         ctx.rushRanking = res.playlist
       })
     }

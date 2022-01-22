@@ -11,7 +11,7 @@ class EnhanceRequest {
           resolve(res.data)
         },
         fail: reject
-      })      
+      })
     })
   }
   get(url, params) {

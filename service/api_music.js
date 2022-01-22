@@ -19,3 +19,9 @@ export function getSongMenu(cat="全部", limit=8, offset=0) {
     offset // 用于分页，(评论页数-1)*50
   })
 }
+// 歌单详情
+export function getSongListDetail(id) {
+  return enhanceReuqest.get("/playlist/detail/dynamic",{
+    id
+  })
+}

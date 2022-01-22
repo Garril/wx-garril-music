@@ -1,66 +1,32 @@
 // pages/detail-search/index.js
+import { getSearchHot,getSearchSuggest } from '../../service/api_search'
+
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    hotKeyWords: [], // 热门搜索
+    suggestList: [], // 建议搜索项
+    textValue: "", // 搜索框输入的关键字
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function (options) {
-
+    this.getSearchData()
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  // 请求获取热门搜索
+  getSearchData() {
+    getSearchHot().then(res => {
+      this.setData({ hotKeyWords: res.result.hots })
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  // 搜索框输入后的 事件处理
+  searchTextChange(event) {
+    const textValue = event.detail
+    this.setData({ textValue })
+    if(!textValue.length) {
+      this.setData({ suggestList: [] })
+      return
+    }
+    // 根据搜索关键字，获取相关搜索项
+    getSearchSuggest(textValue).then(res => {
+      this.setData({ suggestList: res.result.allMatch })
+    })
   }
 })

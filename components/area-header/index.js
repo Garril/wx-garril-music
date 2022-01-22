@@ -21,7 +21,7 @@ Component({
 
   methods: {
     handleRightClick: function() {
-      this.triggerEvent("click")
+      this.triggerEvent("clickMore")
     }
   }
 })
