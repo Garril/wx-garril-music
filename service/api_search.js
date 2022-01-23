@@ -10,3 +10,9 @@ export function getSearchSuggest(keywords) {
     type: "mobile" // 移动端
   })
 }
+// 搜索结果
+export function getSearchResult(keywords) {
+  return enhanceRequest.get("/search",{
+    keywords
+  })
+}
