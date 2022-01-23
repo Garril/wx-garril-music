@@ -1,27 +1,37 @@
 <!--pages/detail-search/index.wxml-->
 <!-- 搜索框 -->
 <van-search
+  class="search"
   background="#f7f7f7"
   shape="round"
+  value="{{textValue}}"
   bind:change="searchTextChange"
+  bind:search="searchKeyUpEnter"
 ></van-search>
-<!-- 热门搜索项 -->
+
+<!-- 热门搜索项 - 显示条件：搜索框没有输入内容，搜索建议项列表无值 -->
 <view class="hot" wx:if="{{!textValue.length && !suggestList.length}}">
   <area-header title="热门搜索" showRight="{{false}}"></area-header>
   <view class="list">
     <block wx:for="{{hotKeyWords}}" wx:key="first">
-      <view class="tag">{{item.first}}</view>
+      <view class="tag" 
+            bindtap="handleItemClick" 
+            data-keyword="{{item.first}}">{{item.first}}
+      </view>
     </block>
   </view>
 </view>
-<!-- 建议搜索 -->
-<view class="suggest" wx:else>
+
+<!-- 建议搜索 - 显示条件：搜索建议项列表有值，搜索结果列表无值 -->
+<view class="suggest" wx:elif="{{suggestList.length && !searchResList.length}}">
   <view class="title">搜索"{{textValue}}"</view>
   <view class="list">
     <block wx:for="{{suggestList}}" wx:key="keyword">
-      <view class="item">
+      <!-- 如果遍历的是suggestNodes而不是list，那么传index  -->
+      <view class="item" bindtap="handleItemClick" data-keyword="{{item.keyword}}">
         <image class="icon" src="/assets/images/icons/search_icon.png" mode="widthFix"></image>
-        <text class="text">{{item.keyword}}</text>
+        <!-- <text class="text">{{item.keyword}}</text> -->
+        <rich-text nodes="{{suggestNodes[index]}}"></rich-text>
       </view>
     </block>
   </view>
