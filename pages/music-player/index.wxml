@@ -1,2 +1,23 @@
 <!--pages/music-player/index.wxml-->
-<text>pages/music-player/index.wxml</text>
+<wxs src="../../utils/format.wxs" module="format"></wxs>
+
+<!-- 1.背景,aspectFill填充 -->
+<image class="bg-image" mode="aspectFill" src="{{songDetailInfo.al.picUrl}}"></image>
+<view class="bg-cover"></view>
+
+<!-- 2.导航 -->
+<nav-bar bind:click="handleBackBtnClick">
+  <view slot="title" class="tab">
+    <view class="{{currentPage === 0 ? 'active': ''}}">歌曲</view>
+    <view class="divider">|</view>
+    <view class="{{currentPage === 1 ? 'active': ''}}">歌词</view>
+  </view>
+</nav-bar>
+
+<!-- 3.内容 - 切页用的轮播图 -->
+<swiper class="content" 
+        style="height: {{contentHeight}}px;"
+        bindchange="handleSwiperChange">
+  <swiper-item>1</swiper-item>
+  <swiper-item>2</swiper-item>
+</swiper>

@@ -31,7 +31,7 @@ export default function debounce(fn, delay = 500, immediate = true, resultCallba
 
   // 封装取消功能
   _debounce.cancel = function() {
-    console.log(timer)
+    // console.log(timer)
     if (timer) clearTimeout(timer)
     timer = null
     isInvoke = false

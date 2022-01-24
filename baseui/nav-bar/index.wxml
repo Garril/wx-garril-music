@@ -1,0 +1,24 @@
+<!--baseui/nav-bar/index.wxml-->
+<view class="nav">
+  <!-- 状态栏占位view -->
+  <view style="height: {{statusBarHeight}}px;"></view>
+  <!-- 真正内容 -->
+  <view class="nav-bar" style="height: {{navBarHeight}}px;">
+    <!-- 左 -->
+    <view class="left" bindtap="handleLeftClick">
+      <!-- slot -->
+      <view class="left-slot"><slot name="left"></slot></view>
+      <view class="left-arrow">
+        <image class="icon" mode="widthFix" src="/assets/images/icons/arrow-left.png"></image>
+      </view>
+    </view>
+    <!-- 中 -->
+    <view class="center">
+      <!-- slot -->
+      <view class="center-slot"><slot name="title"></slot></view>
+      <view class="center-title">{{title}}</view>
+    </view>
+    <!-- 右 -->
+    <view class="right"></view>
+  </view>
+</view>

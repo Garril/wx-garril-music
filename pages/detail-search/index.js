@@ -27,16 +27,21 @@ Page({
     const textValue = event.detail
     this.setData({ textValue })
     if(!textValue.length) {
-      this.setData({ suggestList: [] })
-      this.setData({ searchResList: [] })
+      this.setData({ suggestList: [], searchResList: [] })
+      // 推荐搜索，在输入字符串清空后，还显示的bug，方案一
+      debounceGetSearchSuggest.cancel()
       return
     }
     // 根据搜索关键字，获取相关搜索项
     debounceGetSearchSuggest(textValue).then(res => {
+      // 推荐搜索，在输入字符串清空后，还显示的bug -- 防抖，textValue闭包，用的上回的值
+      // 方案二： if(!this.data.textValue.length) return
+
       // 拿到对应搜索项
       const suggestList = res.result.allMatch
       this.setData({ suggestList })
       // 转化为node节点
+      if(!suggestList) return
       const suggestKeyWords = suggestList.map(item => item.keyword)
       const suggestNodes = []
       for(let keyword of suggestKeyWords) {
