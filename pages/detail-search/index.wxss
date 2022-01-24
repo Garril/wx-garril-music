@@ -1,6 +1,6 @@
 /* pages/detail-search/index.wxss */
 page {
-  padding: 0 20rpx;
+  padding: 56px 20rpx 0 20rpx;
 }
 .van-search {
   padding: 10px 0 !important;
@@ -46,4 +46,18 @@ page {
 }
 .suggest .item .text {
   font-size: 28rpx;
+}
+/* 搜索框固定 */
+.search {
+  position: fixed;
+  top: 0;
+  left: 20rpx;
+  right: 20rpx;
+  /* width: 100%; 撑满不好看，利用fixed，left和right自适应高度 */
+}
+
+/* 搜索结果 */
+.result .title {
+  font-size: 32rpx;
+  color: #26ce8a;
 }

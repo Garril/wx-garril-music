@@ -26,8 +26,9 @@ Page({
   searchTextChange(event) {
     const textValue = event.detail
     this.setData({ textValue })
-    if(textValue=="") {
+    if(!textValue.length) {
       this.setData({ suggestList: [] })
+      this.setData({ searchResList: [] })
       return
     }
     // 根据搜索关键字，获取相关搜索项
@@ -47,6 +48,9 @@ Page({
   },
   // 监听搜索框的回车
   searchKeyUpEnter() {
+    // 如果要加 历史搜索 的功能：
+    // wx.set/getStorage，本地保存，或者保存到本地服务器
+    // 保存的时候，注意判断下 搜索词的 重复性
     const textValue = this.data.textValue
     if(textValue == "") return
     getSearchResult(textValue).then(res => {

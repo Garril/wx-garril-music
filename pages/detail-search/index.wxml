@@ -5,6 +5,7 @@
   background="#f7f7f7"
   shape="round"
   value="{{textValue}}"
+  show-action="{{textValue}}"
   bind:change="searchTextChange"
   bind:search="searchKeyUpEnter"
 ></van-search>
@@ -33,6 +34,15 @@
         <!-- <text class="text">{{item.keyword}}</text> -->
         <rich-text nodes="{{suggestNodes[index]}}"></rich-text>
       </view>
+    </block>
+  </view>
+</view>
+<!-- 搜索结果 -->
+<view class="result" wx:elif="{{searchResList.length}}">
+  <view class="title">最佳匹配</view>
+  <view class="list">
+    <block wx:for="{{searchResList}}" wx:key="id">
+      <song-item-v2 item="{{item}}" index="{{index+1}}"></song-item-v2>
     </block>
   </view>
 </view>
