@@ -42,7 +42,7 @@ page {
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
-  padding: 30rpx 60rpx;
+  padding: 10rpx 60rpx 30rpx 60rpx;
 }
 
 /* 封面 */
@@ -80,7 +80,7 @@ page {
   justify-content: center;
   flex: 1;
   font-size: 28rpx;
-  color: #0f0;
+  color: rgb(175, 228, 197);
 }
 
 /* 进度 */
