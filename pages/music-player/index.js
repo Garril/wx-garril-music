@@ -1,25 +1,36 @@
 // pages/music-player/index.js
-import { getSongDetail } from '../../service/api_player'
+import { getSongDetail, getSongLyric } from '../../service/api_player'
+import { parseLyric } from '../../utils/parse-lyric'
 import { audioContext } from '../../store/index'
 
 Page({
   data: {
     songDetailInfo: {}, // 请求到的歌曲信息
+    lyricInfos: [], // 歌词信息，对象数组，包含时间和文本内容
+    durationTime: 0, // 歌曲播放总时间
+    
     currentPage: 0, // 歌曲页 - 0 / 歌词页 - 1
     contentHeight: 0, // 内容/轮播图 的高度
     isMusicLyricShow: true, // 歌词是否要显示--设备宽高比
-    durationTime: 0, // 歌曲播放总时间
     currentTime: 0, // 歌曲播放的当前时间
     sliderValue: 0, // 进度条的值  0~100
     isSliderChanging: false, // 播放条是否在被滑动修改，防止播放和滑动同时修改sliderValue，导致滑动条显示抽搐效果
+    currentLyricText: '', // 当前的歌词
+    currentLyricIndex: 0, // 当前歌词在数组中的index，防止多次赋值
+    lyricScrollTop: 0, // 歌词滚动高度
   },
-  // 网络请求
+  // ============= 网络请求 =============
   getMusicData(id) {
     getSongDetail(id).then(res => {
       this.setData({ songDetailInfo: res.songs[0], durationTime: res.songs[0].dt })
     })
+    getSongLyric(id).then(res => {
+      const lyricString = res.lrc.lyric
+      const lyricInfos = parseLyric(lyricString)
+      this.setData({ lyricInfos })
+    })
   },
-  // 监听轮播图滚动
+  // ============= 监听轮播图滚动 =============
   handleSwiperChange(event) {
     this.setData({ currentPage: event.detail.current })
   },
@@ -48,24 +59,46 @@ Page({
     audioContext.stop()
     audioContext.src = `https://music.163.com/song/media/outer/url?id=${id}.mp3`
     // audioContext.autoplay = true
+    this.setupAudioContextListener()
+  },
+  // ============= audioContext的事件监听 =============
+  setupAudioContextListener() {
     // 在获取到src的音频流后，会自动调用onCanplay，内部调个play就可以，不用autoplay
     audioContext.onCanplay(() => {
       audioContext.play()
     })
-
     // 监听 播放时间 变化后（这里处理显示的数据）
     audioContext.onTimeUpdate(() => {
+      // 获取当前时间
       const currentTime = audioContext.currentTime * 1000
+
       // 播放条 随播放时间移动,先判断是否在滑动修改，避免冲突
       if(!this.data.isSliderChanging) {
         // 改变当前播放时间数据，和显示
-        const sliderValue = currentTime / this.data.durationTime * 100      
+        const sliderValue = currentTime / this.data.durationTime * 100
         this.setData({ sliderValue, currentTime })
       }
-    })
 
+      // Page1--根据当前时间去查找播放的歌词
+      let i  = 0
+      for(; i < this.data.lyricInfos.length; i++) {
+        const lyricInfo = this.data.lyricInfos[i]
+        if(currentTime < lyricInfo.time) {
+          break
+        }
+      }
+      // 设置当前索引和内容
+      if(this.data.currentLyricIndex !== i-1 ) {
+        const currentLyricText = this.data.lyricInfos[i-1].text
+        this.setData({ 
+          currentLyricText,
+          currentLyricIndex: i-1,
+          lyricScrollTop: (i-1) * 35
+        })
+      }
+    })
   },
-  // 监听 播放条点击
+  // ============= 监听 播放条点击 =============
   handleSliderChange(event) {
     // 获取变化后的值
     const value =  event.detail.value // 0到100的值
@@ -80,7 +113,7 @@ Page({
     // 对应的播放条，做相应变化，以及改变isSliderChanging
     this.setData({ sliderValue: value, isSliderChanging: false })
   },
-  // 监听 播放条滑动，一旦滑动松手，就会触发handleSliderChange，相当于点击
+  // ============= 监听 播放条滑动，一旦滑动松手，就会触发handleSliderChange，相当于点击 =============
   handleSliderChanging(event) {
     // 表明正在滑动修改播放条
     this.setData({ isSliderChanging: true })
