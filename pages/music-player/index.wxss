@@ -79,7 +79,7 @@ page {
   align-items: center;
   justify-content: center;
   flex: 1;
-  font-size: 28rpx;
+  font-size: 30rpx;
   color: rgb(175, 228, 197);
 }
 
@@ -136,19 +136,13 @@ page {
   overflow: hidden;
 }
 
-::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  color: transparent;
-}
-
 .lyric-list .item {
+  /* 每一行歌词在35px内居中，滚动也为35px */
   height: 35px;
   line-height: 35px;
   font-size: 28rpx;
   text-align: center;
   color: #989898;
-
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -5,3 +5,9 @@ export function getSongDetail(ids) {
     ids
   })
 }
+// 获取歌词
+export function getSongLyric(id) {
+  return enhanceReuqest.get("/lyric",{
+    id
+  })
+}
