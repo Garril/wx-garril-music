@@ -18,6 +18,7 @@ Component({
   // lifetimes:{  ready() {...}, } 组件的生命周期都写这里
   methods: {
     handleLeftClick: function() {
+      // 发送事件，具体要做什么，让用户自己决定
       this.triggerEvent('click')
     }
   }
