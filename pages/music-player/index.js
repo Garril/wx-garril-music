@@ -1,7 +1,8 @@
 // pages/music-player/index.js
-import { getSongDetail, getSongLyric } from '../../service/api_player'
-import { parseLyric } from '../../utils/parse-lyric'
-import { audioContext } from '../../store/index'
+import { audioContext, playerStore } from '../../store/index'
+
+// 播放模式名字数组
+const playModeMap = ["order","repeat","random"]
 
 Page({
   data: {
@@ -9,26 +10,21 @@ Page({
     lyricInfos: [], // 歌词信息，对象数组，包含时间和文本内容
     durationTime: 0, // 歌曲播放总时间
     
+    currentTime: 0, // 歌曲播放的当前时间
+    currentLyricText: '', // 当前的歌词
+    currentLyricIndex: 0, // 当前歌词在数组中的index，防止多次赋值
+    playModeIndex: 0, // 歌曲播放模式
+    isPlaying: false, // 歌曲是否在播放
+    // 上述都在store中获取
+    
+    playModeName: "order", // 歌曲播放模式名字，用于图片src动态写入
+    playStatusName: "pause", // 播放状态--暂停和播放。自动播放，默认显示暂停
     currentPage: 0, // 歌曲页 - 0 / 歌词页 - 1
     contentHeight: 0, // 内容/轮播图 的高度
     isMusicLyricShow: true, // 歌词是否要显示--设备宽高比
-    currentTime: 0, // 歌曲播放的当前时间
     sliderValue: 0, // 进度条的值  0~100
     isSliderChanging: false, // 播放条是否在被滑动修改，防止播放和滑动同时修改sliderValue，导致滑动条显示抽搐效果
-    currentLyricText: '', // 当前的歌词
-    currentLyricIndex: 0, // 当前歌词在数组中的index，防止多次赋值
     lyricScrollTop: 0, // 歌词滚动高度
-  },
-  // ============= 网络请求 =============
-  getMusicData(id) {
-    getSongDetail(id).then(res => {
-      this.setData({ songDetailInfo: res.songs[0], durationTime: res.songs[0].dt })
-    })
-    getSongLyric(id).then(res => {
-      const lyricString = res.lrc.lyric
-      const lyricInfos = parseLyric(lyricString)
-      this.setData({ lyricInfos })
-    })
   },
   // ============= 监听轮播图滚动 =============
   handleSwiperChange(event) {
@@ -37,8 +33,9 @@ Page({
   onLoad: function (options) {
     // 获取歌曲id
     const id = options.id
-    // 发请求
-    this.getMusicData(id)
+    // 去store，获取歌曲信息
+    this.setupPlayerStoreListener()
+
     // 计算内容高度
     const globalData = getApp().globalData
     const screenHeight = globalData.screenHeight
@@ -52,51 +49,10 @@ Page({
     }
     // 创建播放器---到首页外头，也要显示播放的歌曲，而且这里创建的是局部变量
     // 页面播放的时候，其实是调用了这个audioContext，用了闭包。也不好管理
+    // 这里的思路：放到store的action里面，请求完信息后让他播放
     // const audioContext = wx.createInnerAudioContext()
     // audioContext.src = `https://music.163.com/song/media/outer/url?id=${id}.mp3`
     // audioContext.autoplay = true
-
-    audioContext.stop()
-    audioContext.src = `https://music.163.com/song/media/outer/url?id=${id}.mp3`
-    // audioContext.autoplay = true
-    this.setupAudioContextListener()
-  },
-  // ============= audioContext的事件监听 =============
-  setupAudioContextListener() {
-    // 在获取到src的音频流后，会自动调用onCanplay，内部调个play就可以，不用autoplay
-    audioContext.onCanplay(() => {
-      audioContext.play()
-    })
-    // 监听 播放时间 变化后（这里处理显示的数据）
-    audioContext.onTimeUpdate(() => {
-      // 获取当前时间
-      const currentTime = audioContext.currentTime * 1000
-
-      // 播放条 随播放时间移动,先判断是否在滑动修改，避免冲突
-      if(!this.data.isSliderChanging) {
-        // 改变当前播放时间数据，和显示
-        const sliderValue = currentTime / this.data.durationTime * 100
-        this.setData({ sliderValue, currentTime })
-      }
-
-      // Page1--根据当前时间去查找播放的歌词
-      let i  = 0
-      for(; i < this.data.lyricInfos.length; i++) {
-        const lyricInfo = this.data.lyricInfos[i]
-        if(currentTime < lyricInfo.time) {
-          break
-        }
-      }
-      // 设置当前索引和内容
-      if(this.data.currentLyricIndex !== i-1 ) {
-        const currentLyricText = this.data.lyricInfos[i-1].text
-        this.setData({ 
-          currentLyricText,
-          currentLyricIndex: i-1,
-          lyricScrollTop: (i-1) * 35
-        })
-      }
-    })
   },
   // ============= 监听 播放条点击 =============
   handleSliderChange(event) {
@@ -121,7 +77,70 @@ Page({
     const currentTime = this.data.durationTime * value/100 // 应该显示的、滑动后的播放时间
     this.setData({ currentTime })
   },
+  // 对store里面保存的歌曲信息进行监听 --- 获取信息
+  setupPlayerStoreListener() {
 
+    // 监听 "songDetailInfo","lyricInfos","durationTime"，返回含这3属性的对象，直接解构
+    playerStore.onStates(["songDetailInfo","lyricInfos","durationTime"], ({
+      songDetailInfo,
+      lyricInfos,
+      durationTime
+    }) => {
+      if(songDetailInfo) this.setData({ songDetailInfo })
+      if(lyricInfos) this.setData({ lyricInfos })
+      if(durationTime) this.setData({ durationTime })
+    })
+
+    // 监听 "currentTime","currentLyricText","currentLyricIndex"
+    playerStore.onStates(["currentTime","currentLyricText","currentLyricIndex"], ({
+      currentTime,
+      currentLyricText,
+      currentLyricIndex
+    }) => {
+      // 时间变化
+      if(currentTime && !this.data.isSliderChanging) {
+        const sliderValue = currentTime / this.data.durationTime * 100
+        this.setData({ currentTime, sliderValue })
+      }
+      // 歌词变化
+      if(currentLyricIndex) {
+        this.setData({ currentLyricIndex, lyricScrollTop: currentLyricIndex * 35  })
+      }
+      if(currentLyricText) this.setData({ currentLyricText })
+    })
+
+    // 监听播放模式：playModeIndex
+    playerStore.onStates(["playModeIndex","isPlaying"], ({playModeIndex,isPlaying}) => {
+      if(playModeIndex !== undefined) {
+        this.setData({ 
+          playModeIndex,
+          playModeName: playModeMap[playModeIndex],
+        })
+      }
+
+      if(isPlaying !== undefined) {
+        this.setData({
+          isPlaying,
+          playStatusName: isPlaying ? "pause": "resume"
+        })
+      }
+    })
+  },
+  // 返回功能
+  handleBackBtnClick() {
+    wx.navigateBack()
+  },
+  // 循环播放模式
+  handleModeClick() {
+    const newPlayModeIndex = (this.data.playModeIndex + 1) % 3
+    // this.setData({ playModeIndex: newPlayModeIndex }) -- 要改变store的，而不是自己的(不会动态改变)
+    playerStore.setState("playModeIndex", newPlayModeIndex)
+  },
+  // 暂停/播放
+  handlePlayStatus() {
+    // 单单设置变量isPlaying，只是改变变量而已，要改变audioContext，到store去
+    playerStore.dispatch("changeMusicPlayStatusAction")
+  }
 })
 
 // 思路：

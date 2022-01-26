@@ -37,7 +37,7 @@
           "scene": null
         },
         {
-          "name": "music-player",
+          "name": "player_music",
           "pathName": "pages/music-player/index",
           "query": "id=1901371647",
           "scene": null

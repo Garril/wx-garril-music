@@ -57,9 +57,15 @@
     <!-- 播放、暂停、上一曲、下一曲等操作 -->
     <view class="operation">
       <!-- 因为小程序里面，给某一个组件设置背景，他必须是远程图片，所以这里用的image -->
-      <image class="btn btn-mode" src="/assets/images/player/play_order.png"></image>
+      <image class="btn btn-mode" 
+             src="/assets/images/player/play_{{playModeName}}.png"
+             bindtap="handleModeClick">
+      </image>
       <image class="btn btn-prev" src="/assets/images/player/play_prev.png"></image>
-      <image class="btn btn-pause" src="/assets/images/player/play_pause.png"></image>
+      <image class="btn btn-pause" 
+             src="/assets/images/player/play_{{playStatusName}}.png"
+             bindtap="handlePlayStatus">
+      </image>
       <image class="btn btn-next" src="/assets/images/player/play_next.png"></image>
       <image class="btn btn-music" src="/assets/images/player/play_music.png"></image>
     </view>

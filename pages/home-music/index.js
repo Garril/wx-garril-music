@@ -5,7 +5,7 @@ import { getBanners,getSongMenu } from '../../service/api_music'
 import queryRect from '../../utils/query-rect'
 import throttle from '../../utils/throttle'
 
-const throttleQueryRect = throttle(queryRect,1000)
+const throttleQueryRect = throttle(queryRect, 1000, {trailing: true} )
 
 Page({
   data: {
