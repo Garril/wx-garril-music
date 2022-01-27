@@ -33,12 +33,12 @@
         <!-- <text class="singer">{{songDetailInfo.ar[0].name}}</text>
         <text class="singer_alias" wx:if="{{songDetailInfo.alia[0]}}"> - </text>
         <text class="alias" wx:if="{{songDetailInfo.alia[0]}}">{{songDetailInfo.alia[0]}}</text> -->
-        <view class="singer">{{songDetailInfo.ar[0].name}}</view>
-        <view class="alias">专辑：{{songDetailInfo.alia[0]}}</view>
+        <view class="singer" wx:if="{{songDetailInfo.ar[0].name}}">{{songDetailInfo.ar[0].name}}</view>
+        <view class="alias" wx:if="{{songDetailInfo.alia[0]}}">专辑：{{songDetailInfo.alia[0]}}</view>
       </view>
     </view>
     <!-- 歌词 -->
-    <view class="lyric" wx:if="{{isMusicLyricShow}}">{{currentLyricText}}</view>
+    <view class="lyric" wx:if="{{isMusicLyricShow && currentLyricText}}">{{currentLyricText}}</view>
     <view class="progress">
       <!-- 播放条 -->
       <slider block-size="{{12}}" 

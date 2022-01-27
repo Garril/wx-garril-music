@@ -30,9 +30,11 @@ Page({
   handleSwiperChange(event) {
     this.setData({ currentPage: event.detail.current })
   },
+
   onLoad: function (options) {
     // 获取歌曲id
-    const id = options.id
+    // const id = options.id
+
     // 去store，获取歌曲信息
     this.setupPlayerStoreListener()
 
@@ -54,6 +56,8 @@ Page({
     // audioContext.src = `https://music.163.com/song/media/outer/url?id=${id}.mp3`
     // audioContext.autoplay = true
   },
+
+
   // ============= 监听 播放条点击 =============
   handleSliderChange(event) {
     // 获取变化后的值
@@ -139,7 +143,7 @@ Page({
   // 暂停/播放
   handlePlayStatus() {
     // 单单设置变量isPlaying，只是改变变量而已，要改变audioContext，到store去
-    playerStore.dispatch("changeMusicPlayStatusAction")
+    playerStore.dispatch("changeMusicPlayStatusAction",!this.data.isPlaying)
   }
 })
 

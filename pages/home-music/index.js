@@ -1,5 +1,5 @@
 // pages/home-music/index.js
-import { rankingStore } from '../../store/index'
+import { playerStore, rankingStore } from '../../store/index'
 
 import { getBanners,getSongMenu } from '../../service/api_music'
 import queryRect from '../../utils/query-rect'
@@ -95,5 +95,11 @@ Page({
     wx.navigateTo({
       url: `/pages/detail-songs/index?ranking=${rankingName}&type=rankList`,
     })
+  },
+  // 处理歌曲点击 
+  handleSongItemClick(event) {
+    const index = event.currentTarget.dataset.index
+    playerStore.setState("playListSongs",this.data.recommendSongs)
+    playerStore.setState("playListIndex",index)
   }
 })
