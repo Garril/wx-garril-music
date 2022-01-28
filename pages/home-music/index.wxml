@@ -60,3 +60,19 @@
     </block>
   </view>
 </view>
+<!-- 音乐播放小组件 -->
+<view class="play-bar">
+  <view class="left">
+    <image class="album album-anim" 
+           mode="aspectFill"
+           style="animation-play-state: {{isPlaying ? 'running':'paused' }}"
+           src="{{songDetailInfo.al.picUrl}}"></image>
+    <view class="name">{{songDetailInfo.name}}</view>
+  </view>
+  <view class="right">
+    <image class="icon play" 
+           src="/assets/images/music/{{isPlaying ? 'pause':'play'}}_icon.png"
+           bindtap="handlePlayClick"></image>
+    <image class="icon playlist" src="/assets/images/music/playlist_icon.png"></image>
+  </view>
+</view>

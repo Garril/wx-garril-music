@@ -6,6 +6,8 @@ const audioContext = wx.createInnerAudioContext()
 
 const playerStore = new HYEventStore({
   state: {
+    isOpen: false, // 记录 audioContext 是否 开启监听
+
     id: "", // 歌曲id
     songDetailInfo: {}, // 请求到的歌曲信息
     lyricInfos: [], // 歌词信息，对象数组，包含时间和文本内容
@@ -22,8 +24,10 @@ const playerStore = new HYEventStore({
     playListIndex: 0, // 歌曲当前在列表中的index
   },
   actions: {
-    requestPlayMusicById(ctx,{ id }) { // 直接对payload进行解构
-      if(ctx.id === id) { // 同一首歌曲
+    // 请求并播放音乐，设置监听
+    requestPlayMusicById(ctx,{ id, isRefresh = false}) { // 直接对payload进行解构
+
+      if(ctx.id == id && !isRefresh) { // 同一首歌曲
         // 二次点击歌曲，进入播放页面，设置歌曲为播放
         this.dispatch("changeMusicPlayStatusAction",true)
         return
@@ -57,10 +61,12 @@ const playerStore = new HYEventStore({
       audioContext.src = `https://music.163.com/song/media/outer/url?id=${id}.mp3`
       audioContext.autoplay = true
 
-      // 设置监听函数 
-      this.dispatch("setupAudioContextListenerAction")
+      // 设置监听函数 -- 只需要开第一次
+      if(!ctx.isOpen) { 
+        this.dispatch("setupAudioContextListenerAction")
+        ctx.isOpen = true
+      }
     },
-
     // 设置 audioContext的事件监听 
     setupAudioContextListenerAction(ctx) {
       // 在获取到src的音频流后，会自动调用onCanplay，内部调个play就可以，不用autoplay
@@ -81,7 +87,6 @@ const playerStore = new HYEventStore({
         // }
         
         ctx.currentTime = currentTime
-
         // Page1--根据当前时间去查找播放的歌词
         if(!ctx.lyricInfos.length) return
         let i  = 0
@@ -94,7 +99,7 @@ const playerStore = new HYEventStore({
         // 设置当前索引和内容
         const rightIndex = i-1
         if(ctx.currentLyricIndex !== rightIndex ) {
-          // 处理某些 特殊！歌曲时候，前半段没歌词报错
+          // 处理某些 特殊！歌曲时候，前半段没ctx.lyricInfos[rightIndex]报错
           if( ctx.lyricInfos[rightIndex] && ctx.lyricInfos[rightIndex].text) {
             const currentLyricText = ctx.lyricInfos[rightIndex].text
             ctx.currentLyricText = currentLyricText
@@ -107,6 +112,11 @@ const playerStore = new HYEventStore({
           // })
         }
       })
+
+      // 监听 歌曲播放完成
+      audioContext.onEnded(() => {
+        this.dispatch("changeCurMusicPlayAction")
+      })
     },
     // 改变播放状态
     changeMusicPlayStatusAction(ctx,isPlaying = true) {
@@ -116,6 +126,38 @@ const playerStore = new HYEventStore({
       } else {
         audioContext.pause()
       }
+    },
+    // 上一首歌 和 下一首歌
+    changeCurMusicPlayAction(ctx,isNext = true) {
+      // 获取当前索引
+      let index = ctx.playListIndex
+      let t = index
+      // 根据播放模式找下一首歌index
+      switch(ctx.playModeIndex) {
+        case 0: // 顺序播放
+          index = isNext? index + 1 : index -1
+          if(index === -1) index = cxt.playListSongs.length - 1
+          if(index === ctx.playListSongs.length) index = 0
+          break
+        case 1: // 单曲循环
+          break
+        case 2: // 随机播放
+          t = index
+          do {
+            index = Math.floor(Math.random() * ctx.playListSongs.length)
+          } while(t == index)
+          break
+      }
+      // 取得index对应歌曲
+      let currentSong = ctx.playListSongs[index]
+      if(!currentSong) { // 错误处理，直接当前歌曲不变
+        currentSong = ctx.songDetailInfo
+      } else {
+        // 播放新的歌曲
+        ctx.playListIndex = index
+        ctx.songDetailInfo = currentSong
+      }
+      this.dispatch("requestPlayMusicById",{ id: currentSong.id , isRefresh: true })
     },
 
   }

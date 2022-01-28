@@ -57,7 +57,6 @@ Page({
     // audioContext.autoplay = true
   },
 
-
   // ============= 监听 播放条点击 =============
   handleSliderChange(event) {
     // 获取变化后的值
@@ -73,6 +72,7 @@ Page({
     // 对应的播放条，做相应变化，以及改变isSliderChanging
     this.setData({ sliderValue: value, isSliderChanging: false })
   },
+
   // ============= 监听 播放条滑动，一旦滑动松手，就会触发handleSliderChange，相当于点击 =============
   handleSliderChanging(event) {
     // 表明正在滑动修改播放条
@@ -81,6 +81,7 @@ Page({
     const currentTime = this.data.durationTime * value/100 // 应该显示的、滑动后的播放时间
     this.setData({ currentTime })
   },
+
   // 对store里面保存的歌曲信息进行监听 --- 获取信息
   setupPlayerStoreListener() {
 
@@ -134,16 +135,27 @@ Page({
   handleBackBtnClick() {
     wx.navigateBack()
   },
+
   // 循环播放模式
   handleModeClick() {
     const newPlayModeIndex = (this.data.playModeIndex + 1) % 3
     // this.setData({ playModeIndex: newPlayModeIndex }) -- 要改变store的，而不是自己的(不会动态改变)
     playerStore.setState("playModeIndex", newPlayModeIndex)
   },
+
   // 暂停/播放
   handlePlayStatus() {
     // 单单设置变量isPlaying，只是改变变量而已，要改变audioContext，到store去
     playerStore.dispatch("changeMusicPlayStatusAction",!this.data.isPlaying)
+  },
+
+  // 上一首
+  handlePreSongClick() {
+    playerStore.dispatch("changeCurMusicPlayAction",false)
+  },
+  // 下一首
+  handleNextSongClick() {
+    playerStore.dispatch("changeCurMusicPlayAction",true)
   }
 })
 

@@ -38,7 +38,7 @@
       </view>
     </view>
     <!-- 歌词 -->
-    <view class="lyric" wx:if="{{isMusicLyricShow && currentLyricText}}">{{currentLyricText}}</view>
+    <view class="lyric" wx:if="{{isMusicLyricShow}}">{{currentLyricText}}</view>
     <view class="progress">
       <!-- 播放条 -->
       <slider block-size="{{12}}" 
@@ -61,12 +61,18 @@
              src="/assets/images/player/play_{{playModeName}}.png"
              bindtap="handleModeClick">
       </image>
-      <image class="btn btn-prev" src="/assets/images/player/play_prev.png"></image>
+      <image class="btn btn-prev" 
+             src="/assets/images/player/play_prev.png"
+             bindtap="handlePreSongClick">
+      </image>
       <image class="btn btn-pause" 
              src="/assets/images/player/play_{{playStatusName}}.png"
              bindtap="handlePlayStatus">
       </image>
-      <image class="btn btn-next" src="/assets/images/player/play_next.png"></image>
+      <image class="btn btn-next" 
+             src="/assets/images/player/play_next.png"
+             bindtap="handleNextSongClick">
+      </image>
       <image class="btn btn-music" src="/assets/images/player/play_music.png"></image>
     </view>
   </swiper-item>

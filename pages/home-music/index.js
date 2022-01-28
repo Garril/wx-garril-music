@@ -15,29 +15,19 @@ Page({
     hotSongMenu: [],
     recommendSongMenu: [],
     rankingArr: { 0: {}, 2: {}, 3:{} },
+    songDetailInfo: {},
+    isPlaying: false,
 
   },
   onLoad: function (options) {
     // 页面数据--轮播图
     this.getPageData()
+
     // 调用store的action去发送请求，获取数据
     rankingStore.dispatch("getRankingDataAction")
-    // 从store中获取数据，onState监听变化（包括初始的空数据）offState取消监听
-    rankingStore.onState("hotRanking",res=>{
-      if(!res.tracks) return
-      const recommendSongs = res.tracks.slice(0,6)
-      this.setData({ recommendSongs })
-    })
-    // 新歌榜
-    rankingStore.onState("newSongsRanking",this.getNewRankingHandler(0))
-    // 原创榜
-    rankingStore.onState("originRanking",this.getNewRankingHandler(2))
-    // 飙升榜
-    rankingStore.onState("rushRanking",this.getNewRankingHandler(3))
-    // 上面3次调用getNewRankingHandler，返回的都undefined。拿到3个榜单的数据
-    // 如果3个榜单要按顺序，那么就不要push进数组了，把数组变成对象obj:{ idx: value }
-    // getNewRankingHandler要传 参数idx，idx对应obj初始化好的属性名
-    // 让getNewRankingHandler去return 一个箭头函数，函数内容为现在getNewRankingHandler的内容。
+    
+    // 开启对 store 内数据的监听
+    this.setupPlayerStoreListener();
   },
   // 封装，监听store中数据变化的 回调,
   // 处理巅峰榜需要的数据到对象中，对象再放到数组中
@@ -78,7 +68,9 @@ Page({
   handleSwiperImageLoaded() {
     // 获取组件的高度
     throttleQueryRect('.swiper-image').then(res => {
-      this.setData({ swiperHeight: res[0].height })
+      if(res[0] && res[0].height) {
+        this.setData({ swiperHeight: res[0].height })
+      }
     })
   },
   // 点击推荐歌曲的 更多按钮
@@ -101,5 +93,39 @@ Page({
     const index = event.currentTarget.dataset.index
     playerStore.setState("playListSongs",this.data.recommendSongs)
     playerStore.setState("playListIndex",index)
-  }
+  },
+  // 播放小组件-播放
+  handlePlayClick() {
+    playerStore.dispatch("changeMusicPlayStatusAction", !this.data.isPlaying)
+  },
+  // 开启监听
+  setupPlayerStoreListener() {
+    // 从store中获取数据，onState监听变化（包括初始的空数据）offState取消监听
+
+    // 排行榜
+    rankingStore.onState("hotRanking",res=>{
+      if(!res.tracks) return
+      const recommendSongs = res.tracks.slice(0,6)
+      this.setData({ recommendSongs })
+    })
+    // 新歌榜
+    rankingStore.onState("newSongsRanking",this.getNewRankingHandler(0))
+    // 原创榜
+    rankingStore.onState("originRanking",this.getNewRankingHandler(2))
+    // 飙升榜
+    rankingStore.onState("rushRanking",this.getNewRankingHandler(3))
+
+    // 上面3次调用getNewRankingHandler，返回的都undefined。拿到3个榜单的数据
+    // 如果3个榜单要按顺序，那么就不要push进数组了，把数组变成对象obj:{ idx: value }
+    // getNewRankingHandler要传 参数idx，idx对应obj初始化好的属性名
+    // 让getNewRankingHandler去return 一个箭头函数，函数内容为现在getNewRankingHandler的内容。
+
+    // 播放小组件的音乐信息
+    playerStore.onStates(["songDetailInfo","isPlaying"], ({songDetailInfo, isPlaying}) => {
+      if(songDetailInfo) this.setData({ songDetailInfo })
+      if(isPlaying !== undefined) this.setData({ isPlaying }) 
+    })
+
+  },
+
 })

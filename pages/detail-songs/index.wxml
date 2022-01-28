@@ -11,6 +11,7 @@
     <song-item-v2 item="{{item}}" 
                   index="{{index+1}}"
                   bindtap="handleSongItemClick"
-                  data-index="{{index}}"></song-item-v2>
+                  data-index="{{index}}">
+    </song-item-v2>
   </block>
 </view>
