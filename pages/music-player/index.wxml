@@ -33,8 +33,8 @@
         <!-- <text class="singer">{{songDetailInfo.ar[0].name}}</text>
         <text class="singer_alias" wx:if="{{songDetailInfo.alia[0]}}"> - </text>
         <text class="alias" wx:if="{{songDetailInfo.alia[0]}}">{{songDetailInfo.alia[0]}}</text> -->
-        <view class="singer">{{songDetailInfo.ar[0].name}}</view>
-        <view class="alias">专辑：{{songDetailInfo.alia[0]}}</view>
+        <view class="singer" wx:if="{{songDetailInfo.ar[0].name}}">{{songDetailInfo.ar[0].name}}</view>
+        <view class="alias" wx:if="{{songDetailInfo.alia[0]}}">专辑：{{songDetailInfo.alia[0]}}</view>
       </view>
     </view>
     <!-- 歌词 -->
@@ -61,12 +61,18 @@
              src="/assets/images/player/play_{{playModeName}}.png"
              bindtap="handleModeClick">
       </image>
-      <image class="btn btn-prev" src="/assets/images/player/play_prev.png"></image>
+      <image class="btn btn-prev" 
+             src="/assets/images/player/play_prev.png"
+             bindtap="handlePreSongClick">
+      </image>
       <image class="btn btn-pause" 
              src="/assets/images/player/play_{{playStatusName}}.png"
              bindtap="handlePlayStatus">
       </image>
-      <image class="btn btn-next" src="/assets/images/player/play_next.png"></image>
+      <image class="btn btn-next" 
+             src="/assets/images/player/play_next.png"
+             bindtap="handleNextSongClick">
+      </image>
       <image class="btn btn-music" src="/assets/images/player/play_music.png"></image>
     </view>
   </swiper-item>

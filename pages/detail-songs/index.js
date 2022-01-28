@@ -1,4 +1,4 @@
-import { rankingStore } from "../../store/index"
+import { rankingStore, playerStore } from "../../store/index"
 import { getSongListDetail } from "../../service/api_music"
 
 // pages/detail-songs/index.js
@@ -31,5 +31,11 @@ Page({
   // 获取store数据调用的函数
   getRankingDataHandle(res) {
     this.setData({ rankingInfo: res})
+  },
+  // 处理歌曲点击 
+  handleSongItemClick(event) {
+    const index = event.currentTarget.dataset.index
+    playerStore.setState("playListSongs",this.data.rankingInfo.tracks)
+    playerStore.setState("playListIndex",index)
   }
 })
