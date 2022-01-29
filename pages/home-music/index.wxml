@@ -61,18 +61,20 @@
   </view>
 </view>
 <!-- 音乐播放小组件 -->
-<view class="play-bar">
+    <!-- 占位，有播放器的时候，在最后给个44px，防止遮挡 -->
+<view class="play-bar-placeholder" wx:if="{{songDetailInfo.id}}"></view>
+<view class="play-bar" wx:if="{{songDetailInfo.id}}" bindtap="handlePlayBarClick">
   <view class="left">
     <image class="album album-anim" 
            mode="aspectFill"
-           style="animation-play-state: {{isPlaying ? 'running':'paused' }}"
+           style="animation-play-state: {{isPlaying ? 'running':'paused' }};"
            src="{{songDetailInfo.al.picUrl}}"></image>
     <view class="name">{{songDetailInfo.name}}</view>
   </view>
   <view class="right">
     <image class="icon play" 
            src="/assets/images/music/{{isPlaying ? 'pause':'play'}}_icon.png"
-           bindtap="handlePlayClick"></image>
+           catchtap="handlePlayClick"></image>
     <image class="icon playlist" src="/assets/images/music/playlist_icon.png"></image>
   </view>
 </view>
