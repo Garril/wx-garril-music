@@ -4,7 +4,8 @@
         danmu-list="{{danmuList}}"
         referrer-policy="origin"
         loop
-        autoplay>
+        autoplay
+        bindplay="handleVideoPlay">
 </video>
 
 <block wx:for="{{100}}" wx:key="*this">

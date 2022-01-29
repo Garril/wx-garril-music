@@ -98,6 +98,12 @@ Page({
   handlePlayClick() {
     playerStore.dispatch("changeMusicPlayStatusAction", !this.data.isPlaying)
   },
+  // 播放小组件的点击，进入歌曲页面
+  handlePlayBarClick() {
+    wx.navigateTo({
+      url: '/pages/music-player/index?id='+ this.data.songDetailInfo.id,
+    })
+  },
   // 开启监听
   setupPlayerStoreListener() {
     // 从store中获取数据，onState监听变化（包括初始的空数据）offState取消监听
@@ -127,5 +133,4 @@ Page({
     })
 
   },
-
 })

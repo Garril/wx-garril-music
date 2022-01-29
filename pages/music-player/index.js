@@ -66,7 +66,7 @@ Page({
     const currentTime = this.data.durationTime * value/100
 
     // 设置context播放对应时间的音乐
-    audioContext.pause()
+    // audioContext.pause() 变成后台播放后，不做暂停了
     audioContext.seek(currentTime / 1000) // 这里要求传秒s
     // seek跳转后，缓存好了对应片段就会调用onCanplay()去自动播放
     // 对应的播放条，做相应变化，以及改变isSliderChanging
