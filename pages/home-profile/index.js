@@ -3,13 +3,13 @@ import { getUserInfo } from '../../service/api_login'
 
 Page({
   data: {
-
+    userInfo: {}
   },
   handleGetUser: async function(event) {
     const userInfo = await getUserInfo()
-    console.log(userInfo)
+    this.setData({ userInfo })
   },
   handleGetPhoneNumber: function(event) {
-    console.log(event)
+    // console.log(event)
   }
 })

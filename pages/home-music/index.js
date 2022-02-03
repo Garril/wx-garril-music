@@ -61,7 +61,7 @@ Page({
   // 点击搜索框
   handleSearchClick() {
     wx.navigateTo({
-      url: '../detail-search/index',
+      url: '/packageDetail/pages/detail-search/index',
     })
   },
   // 轮播-图片加载完成调用
@@ -85,7 +85,7 @@ Page({
   // 跳转到榜单对应歌单时调用的函数
   navToDetailSongs(rankingName) {
     wx.navigateTo({
-      url: `/pages/detail-songs/index?ranking=${rankingName}&type=rankList`,
+      url: `/packageDetail/pages/detail-songs/index?ranking=${rankingName}&type=rankList`,
     })
   },
   // 处理歌曲点击 
@@ -101,7 +101,7 @@ Page({
   // 播放小组件的点击，进入歌曲页面
   handlePlayBarClick() {
     wx.navigateTo({
-      url: '/pages/music-player/index?id='+ this.data.songDetailInfo.id,
+      url: '/packagePlayer/pages/music-player/index?id='+ this.data.songDetailInfo.id,
     })
   },
   // 开启监听

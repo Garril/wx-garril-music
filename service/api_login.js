@@ -20,8 +20,8 @@ export function codeToToken(code) {
   return loginRequest.post("/login", { code })
 }
 
-export function checkToken(token) {
-  return loginRequest.post("/auth", {}, { token })
+export function checkToken() {
+  return loginRequest.post("/auth", {}, true)
 }
 
 export function postFavorRequest(id) {
