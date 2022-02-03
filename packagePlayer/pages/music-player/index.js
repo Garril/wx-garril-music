@@ -81,55 +81,67 @@ Page({
     const currentTime = this.data.durationTime * value/100 // 应该显示的、滑动后的播放时间
     this.setData({ currentTime })
   },
+  // 下面监听时调用的函数，方便取消监听时调用
+  handleCurrentSongInfo({songDetailInfo,lyricInfos,durationTime}) {
+    if(songDetailInfo) this.setData({ songDetailInfo })
+    if(lyricInfos) this.setData({ lyricInfos })
+    if(durationTime) this.setData({ durationTime })
+  },
+  handleCurrentLyricInfo({currentTime,currentLyricText,currentLyricIndex}) {
+    // 时间变化
+    if(currentTime && !this.data.isSliderChanging) {
+      const sliderValue = currentTime / this.data.durationTime * 100
+      this.setData({ currentTime, sliderValue })
+    }
+    // 歌词变化
+    if(currentLyricIndex) {
+      this.setData({ currentLyricIndex, lyricScrollTop: currentLyricIndex * 35  })
+    }
+    if(currentLyricText) this.setData({ currentLyricText })
+  },
+  handlePlayModeInfo({playModeIndex,isPlaying}) {
+    if(playModeIndex !== undefined) {
+      this.setData({ 
+        playModeIndex,
+        playModeName: playModeMap[playModeIndex],
+      })
+    }
+
+    if(isPlaying !== undefined) {
+      this.setData({
+        isPlaying,
+        playStatusName: isPlaying ? "pause": "resume"
+      })
+    }
+  },
 
   // 对store里面保存的歌曲信息进行监听 --- 获取信息
   setupPlayerStoreListener() {
 
     // 监听 "songDetailInfo","lyricInfos","durationTime"，返回含这3属性的对象，直接解构
-    playerStore.onStates(["songDetailInfo","lyricInfos","durationTime"], ({
-      songDetailInfo,
-      lyricInfos,
-      durationTime
-    }) => {
-      if(songDetailInfo) this.setData({ songDetailInfo })
-      if(lyricInfos) this.setData({ lyricInfos })
-      if(durationTime) this.setData({ durationTime })
-    })
+    playerStore.onStates(["songDetailInfo","lyricInfos","durationTime"], this.handleCurrentSongInfo)
 
     // 监听 "currentTime","currentLyricText","currentLyricIndex"
-    playerStore.onStates(["currentTime","currentLyricText","currentLyricIndex"], ({
-      currentTime,
-      currentLyricText,
-      currentLyricIndex
-    }) => {
-      // 时间变化
-      if(currentTime && !this.data.isSliderChanging) {
-        const sliderValue = currentTime / this.data.durationTime * 100
-        this.setData({ currentTime, sliderValue })
-      }
-      // 歌词变化
-      if(currentLyricIndex) {
-        this.setData({ currentLyricIndex, lyricScrollTop: currentLyricIndex * 35  })
-      }
-      if(currentLyricText) this.setData({ currentLyricText })
-    })
+    playerStore.onStates(["currentTime","currentLyricText","currentLyricIndex"], this.handleCurrentLyricInfo)
+    // {
+    //   currentTime,
+    //   currentLyricText,
+    //   currentLyricIndex
+    // }) => {
+    //   // 时间变化
+    //   if(currentTime && !this.data.isSliderChanging) {
+    //     const sliderValue = currentTime / this.data.durationTime * 100
+    //     this.setData({ currentTime, sliderValue })
+    //   }
+    //   // 歌词变化
+    //   if(currentLyricIndex) {
+    //     this.setData({ currentLyricIndex, lyricScrollTop: currentLyricIndex * 35  })
+    //   }
+    //   if(currentLyricText) this.setData({ currentLyricText })
+    // })
 
     // 监听播放模式：playModeIndex
-    playerStore.onStates(["playModeIndex","isPlaying"], ({playModeIndex,isPlaying}) => {
-      if(playModeIndex !== undefined) {
-        this.setData({ 
-          playModeIndex,
-          playModeName: playModeMap[playModeIndex],
-        })
-      }
-
-      if(isPlaying !== undefined) {
-        this.setData({
-          isPlaying,
-          playStatusName: isPlaying ? "pause": "resume"
-        })
-      }
-    })
+    playerStore.onStates(["playModeIndex","isPlaying"], this.handlePlayModeInfo)
   },
   // 返回功能
   handleBackBtnClick() {
@@ -156,6 +168,13 @@ Page({
   // 下一首
   handleNextSongClick() {
     playerStore.dispatch("changeCurMusicPlayAction",true)
+  },
+  // 取消监听
+  onUnload() {
+    // offStates有错误，暂时不用
+    // playerStore.offStates(["songDetailInfo","lyricInfos","durationTime"], this.handleCurrentSongInfo)
+    // playerStore.offStates(["currentTime","currentLyricText","currentLyricIndex"], this.handleCurrentLyricInfo)
+    // playerStore.offStates(["playModeIndex","isPlaying"], this.handlePlayModeInfo)
   }
 })
 

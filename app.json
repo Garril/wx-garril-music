@@ -24,6 +24,7 @@
   ],
   "preloadRule": {
     "pages/home-music/index": {
+      "network": "all",
       "packages": ["packageDetail","packagePlayer"]
     }
   },
