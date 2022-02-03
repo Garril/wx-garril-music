@@ -19,7 +19,7 @@ Component({
     handleMenuItemClick(event) {
       const listId = event.currentTarget.dataset.item.id;
       wx.navigateTo({
-        url: `/pages/detail-songs/index?id=${listId}&type=songList`,
+        url: `/packageDetail/pages/detail-songs/index?id=${listId}&type=songList`,
       })
     }
   }

@@ -45,7 +45,7 @@ Page({
     // 页面跳转
     wx.navigateTo({
       // url: '/pages/detail-video/index?id=' + videoId,
-      url: `/pages/detail-video/index?id=${videoId}`,
+      url: `/packageDetail/pages/detail-video/index?id=${videoId}`,
     })
   }
 })

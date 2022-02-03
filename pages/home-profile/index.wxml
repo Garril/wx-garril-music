@@ -1,3 +1,4 @@
 <!--pages/home-profile/index.wxml-->
 <button open-type="getUserInfo" bindtap="handleGetUser">获取用户信息</button>
+<!-- 个人开发者拿不了手机号 -->
 <button open-type="getPhoneNumber" bindgetphonenumber="handleGetPhoneNumber">获取手机号码</button>
