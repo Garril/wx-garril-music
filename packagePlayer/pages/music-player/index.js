@@ -171,10 +171,10 @@ Page({
   },
   // 取消监听
   onUnload() {
-    // offStates有错误，暂时不用
-    // playerStore.offStates(["songDetailInfo","lyricInfos","durationTime"], this.handleCurrentSongInfo)
-    // playerStore.offStates(["currentTime","currentLyricText","currentLyricIndex"], this.handleCurrentLyricInfo)
-    // playerStore.offStates(["playModeIndex","isPlaying"], this.handlePlayModeInfo)
+    // offStates -- 修正完毕
+    playerStore.offStates(["songDetailInfo","lyricInfos","durationTime"], this.handleCurrentSongInfo)
+    playerStore.offStates(["currentTime","currentLyricText","currentLyricIndex"], this.handleCurrentLyricInfo)
+    playerStore.offStates(["playModeIndex","isPlaying"], this.handlePlayModeInfo)
   }
 })
 
