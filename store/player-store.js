@@ -185,6 +185,9 @@ const playerStore = new HYEventStore({
         case 1: // 单曲循环
           break
         case 2: // 随机播放
+          if(ctx.playListSongs.length === 1 || ctx.playListSongs.length === 0) {
+            break // 处理如果只有1首，防止下面while死循环
+          }
           t = index
           do {
             index = Math.floor(Math.random() * ctx.playListSongs.length)
